@@ -1,3 +1,11 @@
-print("Hello world, from client!")
+local uis = game:GetService("UserInputService")
+local rs = game:GetService("ReplicatedStorage")
+local sps = game:GetService("StarterPlayer")
 
-print("test")
+local moveController = require(sps.StarterPlayerScripts.MovementController)
+
+local SprintRemote = rs.Remotes.SprintRemote
+
+uis.InputBegan:Connect(function(input, processed)
+    moveController.Sprint(input, processed, SprintRemote)
+end)
