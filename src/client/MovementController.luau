@@ -20,13 +20,24 @@ function MovementController.Walk(input, processed, remote)
 
     if input.KeyCode ~= Enum.KeyCode.LeftAlt then return end
 
-    remote:FireServer(true)
+    remote:FireServer("Walk", true)
 
 end
 
 function MovementController.Dodge(input, processed, remote)
     if processed then return end
 
+    if input.KeyCode ~= Enum.KeyCode.Q then return end
+
+    if isKeyDown("W") then
+        remote:FireServer("Dodge", "Forward")
+    elseif isKeyDown("A") then
+        remote:FireServer("Dodge", "Left")
+    elseif isKeyDown("S") then
+        remote:FireServer("Dodge", "Backward")
+    elseif isKeyDown("D") then
+        remote:FireServer("Dodge", "Right")
+    end
 
 end
 

@@ -31,5 +31,12 @@ function CharacterClass:BindCharacter(character)
 
 end
 
+function CharacterClass:RecalculateStats()
+
+end
+
+function CharacterClass:Dodge(direction)
+    
+end
 
 return CharacterClass
