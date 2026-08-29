@@ -1,6 +1,9 @@
 local MovementConfig = {
-    WalkSpeed = 16,
-    SprintSpeed = 24,
+    MovementSpeeds = {
+        JogSpeed = 19,
+        SprintSpeed = 33,
+        WalkSpeed = 5,
+    },
     DodgeCooldown = 0.8,
     MaxStamina = 100,
 }

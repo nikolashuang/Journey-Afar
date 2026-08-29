@@ -1,15 +1,30 @@
+local uis = game:GetService("UserInputService")
+
 local MovementController = {}
 
-function MovementController.Sprint(input, processed, sprintRemote)
+local function isKeyDown(key)
+    return uis:IsKeyDown(Enum.KeyCode[key])
+end
+
+function MovementController.Sprint(input, processed, remote)
     if processed then return end
 
     if input.KeyCode ~= Enum.KeyCode.LeftShift then return end
 
-    sprintRemote:FireServer(true)
+    remote:FireServer("Sprint", true)
 
 end
 
-function MovementController.Dodge(input, processed, sprintRemote)
+function MovementController.Walk(input, processed, remote)
+    if processed then return end
+
+    if input.KeyCode ~= Enum.KeyCode.LeftAlt then return end
+
+    remote:FireServer(true)
+
+end
+
+function MovementController.Dodge(input, processed, remote)
     if processed then return end
 
 
