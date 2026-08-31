@@ -29,6 +29,8 @@ function CharacterClass:BindCharacter(character)
     self.Humanoid.Health = self.Humanoid.MaxHealth
     self.Stamina = self.MaxStamina
 
+    self:RecalculateStats()
+
 end
 
 function CharacterClass:RecalculateStats()
@@ -36,7 +38,7 @@ function CharacterClass:RecalculateStats()
 end
 
 function CharacterClass:Dodge(direction)
-    
+
 end
 
 return CharacterClass

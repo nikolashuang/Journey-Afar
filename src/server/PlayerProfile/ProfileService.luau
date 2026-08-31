@@ -19,7 +19,7 @@ local function deepCopy(original)
 
 end
 
-function ProfileService:LoadProfile(player)
+function ProfileService.LoadProfile(player)
     local key = "Profile_" .. player.UserId
 
     local success, data = pcall(function()
@@ -44,11 +44,11 @@ function ProfileService:LoadProfile(player)
     return profile
 end
 
-function ProfileService:GetProfile(player)
+function ProfileService.GetProfile(player)
     return Profiles[player]
 end
 
-function ProfileService:SaveProfile(player)
+function ProfileService.SaveProfile(player)
     local profile = Profiles[player]
 
     if not profile then
