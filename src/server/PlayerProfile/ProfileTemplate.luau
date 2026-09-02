@@ -21,7 +21,8 @@ local ProfileTemplate = {
     },
 
     Inventory = {},
-    Equipped = {}
+    Equipped = {},
+    Skills = {},
 }
 
 return ProfileTemplate

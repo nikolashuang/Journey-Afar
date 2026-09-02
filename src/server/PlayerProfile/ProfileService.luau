@@ -16,7 +16,6 @@ local function deepCopy(original)
     end
 
     return copy
-
 end
 
 function ProfileService.LoadProfile(player)
