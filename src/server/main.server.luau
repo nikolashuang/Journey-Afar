@@ -42,7 +42,7 @@ mRemote.OnServerEvent:Connect(function(player, action, value)
     if not character then return end
 
     if action == "Sprint" then
-        character.isSprinting = true
+        character:SetSprinting(true)
     end
 
 end)

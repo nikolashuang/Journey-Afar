@@ -15,7 +15,6 @@ function CharacterClass.new(player, profile)
     self.Humanoid = nil
     self.RootPart = nil
 
-    self.Humanoid.Health = 100
     self.MaxHealth = 100
 
     self.Stamina = 100
@@ -52,7 +51,7 @@ function CharacterClass:BindCharacter(character)
 
     self:RecalculateStats()
     
-    self.Humanoid.Health = self.Humanoid.MaxHealth
+    self.Humanoid.Health = self.MaxHealth
     self.Stamina = self.MaxStamina
 
 end
