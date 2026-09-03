@@ -47,6 +47,7 @@ mRemote.OnServerEvent:Connect(function(player, action, direction, behavior)
         character:SetWalking(not character.isWalking)
     elseif action == "Dodge" then
         character:Dodge(direction, behavior)
+        if character.isWalking then character:SetWalking(not character.isWalking) end
     end
 
 end)
