@@ -1,4 +1,5 @@
 local RPS = game:GetService("ReplicatedStorage")
+local Debris = game:GetService("Debris")
 local movementConfig = require(RPS.Shared.MovementConfig)
 
 local CharacterClass = {}
@@ -38,7 +39,7 @@ function CharacterClass.new(player, profile)
     self.isSprinting = false
     self.isWalking = false
 
-
+    self.LastDodge = 0
 
     return self
 
@@ -52,7 +53,12 @@ function CharacterClass:BindCharacter(character)
     self:RecalculateStats()
     
     self.Humanoid.Health = self.MaxHealth
+    self.Humanoid.WalkSpeed = self.jogSpeed
     self.Stamina = self.MaxStamina
+
+    self.MovementAttachment = Instance.new("Attachment")
+    self.MovementAttachment.Name = "MovementAttachment"
+    self.MovementAttachment.Parent = self.RootPart
 
 end
 
@@ -63,14 +69,14 @@ end
 function CharacterClass:SetSprinting(state)
     self.isSprinting = state
 
-    if state then
+    if state and self.Stamina > 0 then
         self.Humanoid.WalkSpeed = self.sprintSpeed
         self.isJogging = false
         self.isWalking = false
     else
         self.Humanoid.WalkSpeed = self.jogSpeed
         self.isJogging = true
-        self.isSprinting = false
+        self.isWalking = false
     end
 
 end
@@ -85,12 +91,44 @@ function CharacterClass:SetWalking(state)
     else
         self.Humanoid.WalkSpeed = self.jogSpeed
         self.isJogging = true
-        self.isWalking = false
+        self.isSprinting = false
     end
 end
 
-function CharacterClass:Dodge(direction)
+function CharacterClass:Dodge(direction, behavior)
+    local now = tick()
+    local deb = movementConfig.DodgeCooldown
 
+    if now - self.LastDodge < deb then return end
+
+    self.LastDodge = now
+
+    local root = self.RootPart
+
+    local lv = Instance.new("LinearVelocity")
+    lv.Attachment0 = self.MovementAttachment
+    lv.RelativeTo = Enum.ActuatorRelativeTo.World
+    lv.ForceLimitsEnabled = false
+
+    if behavior then
+        if direction == "Forward" then
+            lv.VectorVelocity = root.CFrame.LookVector * 90
+        elseif direction == "Left" then
+            lv.VectorVelocity = -root.CFrame.RightVector * 90
+        elseif direction == "Backward" then
+            lv.VectorVelocity = -root.CFrame.LookVector * 90
+        elseif direction == "Right" then
+            lv.VectorVelocity = root.CFrame.RightVector * 90
+        else
+            return
+        end
+    else
+        lv.VectorVelocity = root.CFrame.LookVector * 90
+    end
+
+    lv.Parent = root
+
+    Debris:AddItem(lv, 0.2)
 end
 
 return CharacterClass

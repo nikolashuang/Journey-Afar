@@ -4,8 +4,8 @@ local MovementConfig = {
         SprintSpeed = 33,
         WalkSpeed = 5,
     },
-    DodgeCooldown = 0.8,
-    StaminaDrain = 0.5
+    DodgeCooldown = 1,
+    StaminaDrain = 0.5,
 }
 
 

@@ -36,13 +36,17 @@ end)
 
 local mRemote = ReplicatedStorage.Remotes.MovementRemote
 
-mRemote.OnServerEvent:Connect(function(player, action, value)
+mRemote.OnServerEvent:Connect(function(player, action, direction, behavior)
     local character = Characters[player]
 
     if not character then return end
 
     if action == "Sprint" then
-        character:SetSprinting(true)
+        character:SetSprinting(not character.isSprinting)
+    elseif action == "Walk" then
+        character:SetWalking(not character.isWalking)
+    elseif action == "Dodge" then
+        character:Dodge(direction, behavior)
     end
 
 end)
