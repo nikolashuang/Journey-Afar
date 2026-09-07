@@ -34,7 +34,7 @@ Players.PlayerRemoving:Connect(function(player)
     Characters[player] = nil
 end)
 
-local mRemote = ReplicatedStorage.Remotes.MovementRemote
+local mRemote = ReplicatedStorage.Remotes:WaitForChild("MovementRemote")
 
 mRemote.OnServerEvent:Connect(function(player, action, direction, behavior)
     local character = Characters[player]
@@ -42,9 +42,13 @@ mRemote.OnServerEvent:Connect(function(player, action, direction, behavior)
     if not character then return end
 
     if action == "Sprint" then
-        character:SetSprinting(not character.isSprinting)
+        local canSprint = character:SetSprinting(not character.isSprinting)
+
+        mRemote:FireClient(player, canSprint)
     elseif action == "Walk" then
-        character:SetWalking(not character.isWalking)
+        local canWalk = character:SetWalking(not character.isWalking)
+
+        mRemote:FireClient(player, canWalk)
     elseif action == "Dodge" then
         character:Dodge(direction, behavior)
         if character.isWalking then character:SetWalking(not character.isWalking) end

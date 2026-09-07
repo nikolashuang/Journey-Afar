@@ -39,6 +39,7 @@ function CharacterClass.new(player, profile)
     self.isSprinting = false
     self.isWalking = false
 
+    self.Staggered = false
     self.LastDodge = 0
 
     return self
@@ -67,6 +68,10 @@ function CharacterClass:RecalculateStats()
 end
 
 function CharacterClass:SetSprinting(state)
+    if self.Staggered then
+        return false
+    end
+
     self.isSprinting = state
 
     if state and self.Stamina > 0 then
@@ -79,9 +84,14 @@ function CharacterClass:SetSprinting(state)
         self.isWalking = false
     end
 
+    return "Sprinting"
 end
 
 function CharacterClass:SetWalking(state)
+    if self.Staggered  then
+        return false
+    end
+
     self.isWalking = state
 
     if state then
@@ -93,13 +103,15 @@ function CharacterClass:SetWalking(state)
         self.isJogging = true
         self.isSprinting = false
     end
+
+    return "Walking"
 end
 
 function CharacterClass:Dodge(direction, behavior)
     local now = tick()
     local deb = movementConfig.DodgeCooldown
 
-    if now - self.LastDodge < deb then return end
+    if now - self.LastDodge < deb or self.Staggered then return end
 
     self.LastDodge = now
 
@@ -119,8 +131,6 @@ function CharacterClass:Dodge(direction, behavior)
             lv.VectorVelocity = -root.CFrame.LookVector * 90
         elseif direction == "Right" then
             lv.VectorVelocity = root.CFrame.RightVector * 90
-        else
-            return
         end
     else
         lv.VectorVelocity = root.CFrame.LookVector * 90

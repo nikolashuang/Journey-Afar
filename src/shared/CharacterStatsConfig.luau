@@ -1,6 +1,6 @@
 local CharacterStats = {
     Strength = {
-        Damage = 104
+        Damage = 10
     }
 }
 

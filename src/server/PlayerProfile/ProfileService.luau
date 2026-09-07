@@ -51,7 +51,7 @@ function ProfileService.SaveProfile(player)
     local profile = Profiles[player]
 
     if not profile then
-        return nil
+        return false
     end
 
     local key = "Profile_" .. player.UserId
@@ -64,7 +64,10 @@ function ProfileService.SaveProfile(player)
 
     if not success then
         warn("Failed to save data for", player.Name, err)
+        return false
     end
+
+    return true
 end
 
 function ProfileService:ReleaseProfile(player)
