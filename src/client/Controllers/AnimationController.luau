@@ -2,35 +2,55 @@ local RepStorage = game:GetService("ReplicatedStorage")
 
 local AnimationKey = RepStorage.PlayerAnimations
 
-local MovementAnimations = {
-    JogAnim = AnimationKey.MovementAnimations:FindFirstChild("Jog"),
-    SprintAnim = AnimationKey.MovementAnimations:FindFirstChild("Sprint"),
-    WalkAnim = AnimationKey.MovementAnimations:FindFirstChild("Walk")
+local AnimationsStorage = {
+    Movement = {
+        JogAnim = AnimationKey.Movement:FindFirstChild("Jog"),
+        SprintAnim = AnimationKey.Movement:FindFirstChild("Sprint"),
+        WalkAnim = AnimationKey.Movement:FindFirstChild("Walk")
+    }
 }
 
+
 local humanoid = nil
-local currentMovement = nil
+local animator = nil
+local MovementAnimationTrack = nil
 
 local AnimationController = {}
 
-function AnimationController.SetPlayerValues(character, value)
-    if not character then return end
-
-    humanoid = character:FindFirstChild("Humanoid")
-    currentMovement = value
+function AnimationController.BindCharacter(character)
+    humanoid = character:WaitForChild("Humanoid")
+    animator = humanoid:FindFirstChild("Animator")
 end
 
-function AnimationController.CheckMagnitude()
-    if not humanoid then return end
-
-    if humanoid.MoveDirection.Magnitude > 0 then
-        if currentMovement == "Sprinting" then
-            
-        end
+function AnimationController.SetMovementAnimation(animation)
+    if MovementAnimationTrack and MovementAnimationTrack.IsPlaying then
+        MovementAnimationTrack:Stop()
     end
 
+    local selectedAnimation = AnimationsStorage["Movement"][animation]
+
+    if not selectedAnimation then
+        warn("Animation not found or referencing wrong table")
+        return
+    end
+
+    MovementAnimationTrack = animator:LoadAnimation(selectedAnimation)
 end
 
+function AnimationController.checkMagnitudeMovement()
+    if not humanoid then return end
+    if not MovementAnimationTrack then return end
+
+    if humanoid.MoveDirection.Magnitude > 0 then
+        if not MovementAnimationTrack.IsPlaying then
+            MovementAnimationTrack:Play()
+        end
+    else
+        if MovementAnimationTrack.IsPlaying then
+            MovementAnimationTrack:Stop()
+        end
+    end
+end
 
 
 return AnimationController

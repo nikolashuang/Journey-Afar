@@ -84,7 +84,7 @@ function CharacterClass:SetSprinting(state)
         self.isWalking = false
     end
 
-    return "Sprinting"
+    return
 end
 
 function CharacterClass:SetWalking(state)
@@ -104,7 +104,7 @@ function CharacterClass:SetWalking(state)
         self.isSprinting = false
     end
 
-    return "Walking"
+    return
 end
 
 function CharacterClass:Dodge(direction, behavior)
