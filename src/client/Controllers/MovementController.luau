@@ -34,9 +34,6 @@ function MovementController.Dodge(input, processed, remote)
 
     local mouseBehavior = isShiftLockEnabled()
 
-    print("MouseBehavior", uis.MouseBehavior)
-    print("Shiftlock: ", mouseBehavior)
-
     if isKeyDown("W") then
         remote:FireServer("Dodge", "Forward", mouseBehavior)
     elseif isKeyDown("A") then
@@ -46,7 +43,7 @@ function MovementController.Dodge(input, processed, remote)
     elseif isKeyDown("D") then
         remote:FireServer("Dodge", "Right", mouseBehavior)
     else
-        remote:FireServer("Dodge", "Forward", mouseBehavior)
+        remote:FireServer("Dodge", "Backward", mouseBehavior)
     end
 
 end

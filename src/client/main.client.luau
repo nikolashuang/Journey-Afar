@@ -28,6 +28,7 @@ end)
 
 MovementRemote.OnClientEvent:Connect(function(animation)
     animationController.SetMovementAnimation(animation)
+    animationController.DodgeAnimation(animation)
 end)
 
 RunService.PreRender:Connect(function()

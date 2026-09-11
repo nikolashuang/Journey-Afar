@@ -6,7 +6,14 @@ local AnimationsStorage = {
     Movement = {
         JogAnim = AnimationKey.Movement:FindFirstChild("Jog"),
         SprintAnim = AnimationKey.Movement:FindFirstChild("Sprint"),
-        WalkAnim = AnimationKey.Movement:FindFirstChild("Walk")
+        WalkAnim = AnimationKey.Movement:FindFirstChild("Walk"),
+    },
+
+    Dodges = {
+        ForwardRoll = AnimationKey.Movement:FindFirstChild("ForwardRoll"),
+        LeftRoll = AnimationKey.Movement:FindFirstChild("LeftRoll"),
+        Backstep = AnimationKey.Movement:FindFirstChild("Backstep"),
+        RightRoll = AnimationKey.Movement:FindFirstChild("RightRoll"),
     }
 }
 
@@ -14,6 +21,8 @@ local AnimationsStorage = {
 local humanoid = nil
 local animator = nil
 local MovementAnimationTrack = nil
+local DodgeAnimationTrack = nil
+local animationStopOffset = 0.3
 
 local AnimationController = {}
 
@@ -24,17 +33,29 @@ end
 
 function AnimationController.SetMovementAnimation(animation)
     if MovementAnimationTrack and MovementAnimationTrack.IsPlaying then
-        MovementAnimationTrack:Stop()
+        MovementAnimationTrack:Stop(animationStopOffset)
+    end
+
+    if animation == "Default" then
+        MovementAnimationTrack:Stop(animationStopOffset)
+        MovementAnimationTrack = nil
+        return
     end
 
     local selectedAnimation = AnimationsStorage["Movement"][animation]
 
-    if not selectedAnimation then
-        warn("Animation not found or referencing wrong table")
-        return
-    end
+    if not selectedAnimation then return end
 
     MovementAnimationTrack = animator:LoadAnimation(selectedAnimation)
+end
+
+function AnimationController.DodgeAnimation(animation)
+    local selectedAnimation = AnimationsStorage["Dodges"][animation]
+
+    if not selectedAnimation then return end
+
+    DodgeAnimationTrack = animator:LoadAnimation(selectedAnimation)
+    DodgeAnimationTrack:Play()
 end
 
 function AnimationController.checkMagnitudeMovement()
@@ -47,7 +68,7 @@ function AnimationController.checkMagnitudeMovement()
         end
     else
         if MovementAnimationTrack.IsPlaying then
-            MovementAnimationTrack:Stop()
+            MovementAnimationTrack:Stop(animationStopOffset)
         end
     end
 end

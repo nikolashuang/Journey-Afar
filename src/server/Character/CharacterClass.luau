@@ -110,6 +110,7 @@ end
 function CharacterClass:Dodge(direction, behavior)
     local now = tick()
     local deb = movementConfig.DodgeCooldown
+    local directionType = "Backstep"
 
     if now - self.LastDodge < deb or self.Staggered then return end
 
@@ -125,20 +126,28 @@ function CharacterClass:Dodge(direction, behavior)
     if behavior then
         if direction == "Forward" then
             lv.VectorVelocity = root.CFrame.LookVector * 90
+            directionType = "ForwardRoll"
         elseif direction == "Left" then
             lv.VectorVelocity = -root.CFrame.RightVector * 90
+            directionType = "LeftRoll"
         elseif direction == "Backward" then
-            lv.VectorVelocity = -root.CFrame.LookVector * 90
+            lv.VectorVelocity = -root.CFrame.LookVector * 50
         elseif direction == "Right" then
             lv.VectorVelocity = root.CFrame.RightVector * 90
+            directionType = "RightRoll"
         end
+    elseif self.Humanoid.MoveDirection.Magnitude <= 0 then
+        lv.VectorVelocity = -root.CFrame.LookVector * 50
     else
         lv.VectorVelocity = root.CFrame.LookVector * 90
+        directionType = "ForwardRoll"
     end
 
     lv.Parent = root
 
     Debris:AddItem(lv, 0.2)
+
+    return directionType
 end
 
 return CharacterClass

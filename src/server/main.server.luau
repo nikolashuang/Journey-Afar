@@ -43,13 +43,26 @@ mRemote.OnServerEvent:Connect(function(player, action, direction, behavior)
 
     if action == "Sprint" then
         character:SetSprinting(not character.isSprinting)
-        mRemote:FireClient(player, "SprintAnim")
+
+        if character.isSprinting then 
+            mRemote:FireClient(player, "SprintAnim")
+        else 
+            mRemote:FireClient(player, "Default")
+        end
     elseif action == "Walk" then
         character:SetWalking(not character.isWalking)
-        mRemote:FireClient(player, "WalkAnim")
+        if character.isWalking then 
+            mRemote:FireClient(player, "WalkAnim")
+        else
+            mRemote:FireClient(player, "Default")
+        end
     elseif action == "Dodge" then
-        character:Dodge(direction, behavior)
-        if character.isWalking then character:SetWalking(not character.isWalking) end
+        local animationType = character:Dodge(direction, behavior)
+        mRemote:FireClient(player, animationType)
+        if character.isWalking then 
+            character:SetWalking(not character.isWalking) 
+            mRemote:FireClient(player, animationType)
+        end
     end
 
 end)
